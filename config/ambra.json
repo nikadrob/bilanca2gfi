@@ -1,0 +1,170 @@
+// Konto → AOP pravila za kontni plan AMBRA WATER SOLUTIONS d.o.o. (GFI-POD 6.x).
+// Bilanca/RDG: svako konto ide u točno jedan AOP; vrijedi najduži prefiks konta.
+// Predznak: aktiva i rashodi = D−P, pasiva i prihodi = P−D; "predznak": -1 to obrće.
+// Ispravci vrijednosti (019, 039, 037) imaju potražni saldo pa automatski umanjuju aktivu.
+{
+  "naziv": "AMBRA WATER SOLUTIONS – kontni plan",
+  "prepoznavanje": [ "AMBRA WATER" ],
+
+  "bilanca": [
+    // --- B) Dugotrajna imovina
+    { "konto": "012", "aop": 5,   "opis": "Licence, franšize, software" },
+    { "konto": "019", "aop": 5,   "opis": "Akumulirana amortizacija prava" },
+    { "konto": "030", "aop": 12,  "opis": "Kontejneri (građevinski objekti)" },
+    { "konto": "03901", "aop": 12, "opis": "Ak. amortizacija ostalih građ. objekata" },
+    { "konto": "031", "aop": 14,  "opis": "Strojevi, uređaji, oprema" },
+    { "konto": "032", "aop": 14,  "opis": "Vozila, viličari, dizalice, namještaj" },
+    { "konto": "037", "aop": 14,  "opis": "Obračunata amortizacija u tijeku godine" },
+    { "konto": "039", "aop": 14,  "opis": "Akumulirana amortizacija opreme i vozila" },
+    { "konto": "064", "aop": 28,  "opis": "Dani dugoročni krediti" },
+
+    // --- C) Kratkotrajna imovina
+    { "konto": "30",  "aop": 39,  "opis": "Obračun nabave materijala" },
+    { "konto": "31",  "aop": 39,  "opis": "Zalihe materijala" },
+    { "konto": "35",  "aop": 39,  "opis": "Sitni inventar i vrijednosno usklađenje" },
+    { "konto": "130", "aop": 43,  "opis": "Dani predujmovi (avansi)" },
+    { "konto": "120", "aop": 49,  "opis": "Potraživanja od kupaca (uklj. izdane račune za predujam)" },
+    { "konto": "125", "aop": 50,  "opis": "Potraživanja od zaposlenih" },
+    { "konto": "124", "aop": 51,  "opis": "Potraživanja od HZZO" },
+    { "konto": "160", "aop": 51,  "opis": "Pretporez" },
+    { "konto": "128", "aop": 52,  "opis": "Potraživanja za kamate" },
+    { "konto": "113", "aop": 61,  "opis": "Dani kratkoročni krediti, depoziti, jamstva" },
+    { "konto": "100", "aop": 63,  "opis": "Žiro-računi" },
+    { "konto": "102", "aop": 63,  "opis": "Blagajna" },
+
+    // --- D) Plaćeni troškovi budućeg razdoblja
+    { "konto": "190", "aop": 64,  "opis": "Unaprijed plaćeni troškovi, nefakturirani prihodi" },
+
+    // --- Izvanbilančni zapisi
+    { "konto": "99000", "aop": 66,  "opis": "Izvanbilančno – aktiva" },
+    { "konto": "99001", "aop": 127, "opis": "Izvanbilančno – pasiva" },
+
+    // --- A) Kapital i rezerve
+    { "konto": "900", "aop": 68,  "opis": "Temeljni kapital" },
+    { "konto": "920", "aop": 72,  "opis": "Rezerve (za vlastite dionice)" },
+    { "konto": "931", "aop": 73,  "predznak": -1, "opis": "Vlastite dionice – odbitna stavka" },
+    { "konto": "940", "aop": 85,  "opis": "Zadržana dobit" },
+    { "konto": "950", "aop": 88,  "opis": "Dobit tekuće godine (knjižena)" },
+
+    // --- B) Rezerviranja
+    { "konto": "280", "aop": 96,  "opis": "Dugoročna rezerviranja po garancijama/projektima" },
+
+    // --- C) Dugoročne obveze
+    { "konto": "945", "aop": 104, "opis": "Leasing (Impuls) – dugoročno" },
+
+    // --- D) Kratkoročne obveze
+    { "konto": "214", "aop": 116, "opis": "Kratkoročne obveze prema bankama, kartice" },
+    { "konto": "252", "aop": 116, "opis": "Krediti i leasing (iskazuju se kao kratkoročni)" },
+    { "konto": "224", "aop": 117, "opis": "Primljeni predujmovi" },
+    { "konto": "220", "aop": 118, "opis": "Dobavljači u zemlji" },
+    { "konto": "221", "aop": 118, "opis": "Dobavljači u inozemstvu" },
+    { "konto": "222", "aop": 118, "opis": "Ostale obveze prema dobavljačima" },
+    { "konto": "22220", "aop": 120, "opis": "Obveze za neto ugovore o djelu" },
+    { "konto": "230", "aop": 120, "opis": "Obveze prema zaposlenima" },
+    { "konto": "241", "aop": 121, "opis": "Porez i prirez" },
+    { "konto": "242", "aop": 121, "opis": "Doprinosi" },
+    { "konto": "243", "aop": 121, "opis": "Porez na dobit (predujmovi)" },
+    { "konto": "246", "aop": 121, "opis": "Članarina HGK" },
+    { "konto": "249", "aop": 121, "opis": "Naknada za šume" },
+    { "konto": "260", "aop": 121, "opis": "PDV" },
+    { "konto": "201", "aop": 122, "opis": "Obveze s osnova udjela u dobiti" },
+
+    // --- E) Odgođeno plaćanje troškova i prihod budućeg razdoblja
+    { "konto": "292", "aop": 125, "opis": "Osnovica primljenih predujmova" }
+  ],
+
+  "rdg": [
+    // --- Poslovni prihodi
+    { "konto": "750", "aop": 130, "opis": "Prodaja proizvoda" },
+    { "konto": "751", "aop": 130, "opis": "Prihodi od usluga" },
+    { "konto": "762", "aop": 130, "opis": "Prodaja robe (reexport)" },
+    { "konto": "777", "aop": 130, "opis": "Najam uređaja i održavanje" },
+    { "konto": "770", "aop": 133, "opis": "Otpis obveza" },
+    { "konto": "779", "aop": 133, "opis": "Ostali prihodi (naplata štete)" },
+    { "konto": "780", "aop": 133, "opis": "Izvanredni prihodi" },
+
+    // --- Poslovni rashodi
+    { "konto": "400", "aop": 137, "opis": "Materijal" },
+    { "konto": "402", "aop": 137, "opis": "Rezervni dijelovi" },
+    { "konto": "403", "aop": 137, "opis": "Auto-gume" },
+    { "konto": "405", "aop": 137, "opis": "Otpis sitnog inventara" },
+    { "konto": "406", "aop": 137, "opis": "Energija i gorivo" },
+    { "konto": "713", "aop": 138, "opis": "Nabavna vrijednost prodane robe" },
+    { "konto": "41",  "aop": 139, "opis": "Ostali vanjski troškovi (usluge)" },
+    { "konto": "420", "aop": 141, "opis": "Neto plaće" },
+    { "konto": "422", "aop": 142, "opis": "Porezi i doprinosi iz plaća" },
+    { "konto": "421", "aop": 143, "opis": "Doprinosi na plaće" },
+    { "konto": "430", "aop": 144, "opis": "Amortizacija" },
+    { "konto": "46",  "aop": 145, "opis": "Ostali troškovi" },
+    { "konto": "440", "aop": 147, "opis": "Vrijednosno usklađenje dugotrajne imovine" },
+
+    // --- Financijski prihodi i rashodi
+    { "konto": "772", "aop": 164, "opis": "Prihodi od kamata" },
+    { "konto": "48",  "aop": 171, "opis": "Kamate" }
+  ],
+
+  "dodatni": [
+    { "aop": 231, "konta": [ "11310", "11311", "11312", "064" ], "mjera": "SaldoD", "opis": "Zajmovi dani fizičkim osobama (kratko- i dugoročni)" },
+    { "aop": 232, "konta": [ "11301" ], "mjera": "SaldoD", "opis": "Zajmovi dani poduzećima" },
+    { "aop": 235, "konta": [ "13000" ], "mjera": "SaldoD", "opis": "Predujmovi dani poduzećima" },
+    { "aop": 236, "konta": [ "13010" ], "mjera": "SaldoD", "opis": "Predujmovi dani u inozemstvo" },
+    { "aop": 241, "konta": [ "224" ],   "mjera": "SaldoP", "opis": "Primljeni predujmovi od poduzeća" },
+
+    // Prihodi od prodaje po djelatnostima (NKD 42.91 – vodne građevine)
+    { "aop": 244, "konta": [ "762" ], "mjera": "SaldoP", "opis": "Trgovina (reexport robe)" },
+    { "aop": 248, "konta": [ "750", "751" ], "mjera": "SaldoP", "opis": "Građevinski radovi na ostalim građevinama" },
+    { "aop": 253, "konta": [ "777" ], "mjera": "SaldoP", "opis": "Ostale djelatnosti (najam opreme)" },
+    { "aop": 254, "konta": [ "750", "751", "777" ], "mjera": "SaldoP", "opis": "Prodaja u zemlji" },
+    { "aop": 255, "konta": [ "762" ], "mjera": "SaldoP", "opis": "Prodaja u inozemstvu (reexport)" },
+    { "aop": 260, "konta": [ "777" ], "mjera": "SaldoP", "opis": "Prihodi od najma opreme" },
+
+    // Poslovni rashodi
+    { "aop": 264, "konta": [ "406" ], "mjera": "SaldoD", "opis": "Energija i gorivo" },
+    { "aop": 265, "konta": [ "41701", "41702", "41711" ], "mjera": "SaldoD", "opis": "Otpad, odvodnja, zbrinjavanje otpada" },
+    { "aop": 268, "konta": [ "41101", "41108" ], "mjera": "SaldoD", "opis": "Kooperanti / podizvođači građevinskih radova" },
+    { "aop": 270, "konta": [ "414" ], "mjera": "SaldoD", "opis": "Najam i operativni leasing" },
+    { "aop": 271, "konta": [ "41601" ], "mjera": "SaldoD", "opis": "Ugovori o djelu – bruto" },
+    { "aop": 272, "konta": [ "41102" ], "mjera": "SaldoD", "opis": "Studentski servis" },
+    { "aop": 274, "konta": [ "4191" ], "osim": [ "41915" ], "mjera": "SaldoD", "opis": "Premije osiguranja (bez zdravstvenih usluga)" },
+    { "aop": 275, "konta": [ "4191" ], "osim": [ "41915" ], "mjera": "SaldoD", "opis": "u tome neživotno osiguranje" },
+    { "aop": 276, "konta": [ "466", "468", "41705" ], "mjera": "SaldoD", "opis": "Članarine, biljezi i pristojbe, vodoprivredna naknada" },
+    { "aop": 277, "konta": [ "46161" ], "mjera": "SaldoD", "opis": "Stipendije" },
+    { "aop": 279, "konta": [ "461" ], "osim": [ "46161" ], "mjera": "SaldoD", "opis": "Prijevoz, terenski, nagrade, prehrana, regres" },
+    { "aop": 285, "konta": [ "221" ], "mjera": "PrometP", "opis": "Uvoz (računi inozemnih dobavljača)" },
+
+    // Financijski
+    { "aop": 286, "konta": [ "772" ], "mjera": "SaldoP", "opis": "Prihodi od kamata" },
+    { "aop": 289, "konta": [ "48" ],  "mjera": "SaldoD", "opis": "Rashodi od kamata" },
+
+    // Investicije u izvještajnoj godini (dugovni promet imovine)
+    { "aop": 292, "konta": [ "031", "03205", "03206", "0321" ], "mjera": "PrometD", "opis": "Strojevi i oprema (uklj. viličare, dizalice, namještaj)" },
+    { "aop": 293, "konta": [ "0320", "03201" ], "osim": [ "03205", "03206" ], "mjera": "PrometD", "opis": "Prijevozna sredstva" },
+    { "aop": 294, "konta": [ "01" ], "osim": [ "019" ], "mjera": "PrometD", "opis": "Nematerijalna imovina" }
+  ],
+
+  // Trajni podaci referentne stranice. Imaju prednost pred podacima prenesenim iz prošlogodišnjeg GFI-a.
+  // null = ne mijenja se. Šifre: FINA Upute, poglavlje 6.
+  "referentnaStranica": {
+    "vrstaSubjekta": 5,          // 5 = d.o.o.
+    "standard": "HSFI",          // mali poduzetnik (oznaka veličine 2) → HSFI
+    "vrstaIzvjestaja": 10,       // kalendarska godina, bez statusnih promjena
+    "svrhaPredaje": 3,           // statistika i javna objava
+    "statusAutonomnosti": 1,     // samostalno društvo, nije član grupe
+    "kapitalDomaciPosto": 100,
+    "kapitalStraniPosto": 0,
+    "sifraOpcine": 180,          // Kastav
+
+    // Revizija: AMBRA je obveznik revizije (aktiva i prihodi prethodne godine iznad pragova).
+    // Kad stigne revizorsko izvješće: "revidiran": "DA", "oibRevizora": "...", "misljenjeRevizora": 2
+    "revidiran": null,
+    "oibRevizora": null,
+    "misljenjeRevizora": null
+  },
+
+  // Vrijednosti koje se ne mogu izračunati iz konta (tekuća godina).
+  "rucneVrijednosti": {
+    "230": 0,  // zalihe energetskih proizvoda
+    "296": 0,  // investicije samo u NOVU dugotrajnu imovinu – upisati ručno
+    "299": 0   // broj neplaćenih osoba
+  }
+}

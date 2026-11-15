@@ -1,0 +1,12 @@
+bin/
+obj/
+.vs/
+*.user
+izlaz/
+TestResults/
+
+# Web
+web/node_modules/
+web/dist/
+src/CalixHelper.Api/wwwroot/
+src/CalixHelper.Api/App_Data/

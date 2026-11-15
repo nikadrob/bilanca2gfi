@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- NPOI is pinned to 2.7.x: from 2.8 the binary package carries the OSMF maintenance-fee EULA
+         (fee for commercial users); 2.7.x is plain Apache-2.0. -->
+    <PackageReference Include="NPOI" Version="2.7.6" />
+    <PackageReference Include="PdfPig" Version="0.1.16" />
+    <!-- Transitive dependencies of NPOI pinned to patched versions. -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.15" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.15" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.13" />
+  </ItemGroup>
+
+</Project>

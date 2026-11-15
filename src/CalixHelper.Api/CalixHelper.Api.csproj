@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bilanca2Gfi.Core\Bilanca2Gfi.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Mapping rules and the FINA template are shared with the console app. -->
+    <None Include="..\..\config\*.json" Link="config\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\templates\*.xls" Link="templates\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Upload/download working area; never part of the build. -->
+    <Content Remove="App_Data\**" />
+    <None Remove="App_Data\**" />
+  </ItemGroup>
+
+</Project>
