@@ -1,11 +1,12 @@
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
+import { AuthProvider } from './auth/AuthContext';
 import { AppLayout } from './layout/AppLayout';
 import { features } from './features/registry';
 import { theme } from './theme';
 
-// Authentication will wrap AppLayout (e.g. a <RequireAuth> element) once login is added.
+// AppLayout shows the login modal instead of the content until the user is signed in.
 const router = createBrowserRouter([
   {
     path: '/',
@@ -22,7 +23,9 @@ export function App() {
   return (
     <MantineProvider theme={theme} defaultColorScheme="light">
       <Notifications position="top-right" />
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </MantineProvider>
   );
 }

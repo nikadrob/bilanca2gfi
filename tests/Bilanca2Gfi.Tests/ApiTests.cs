@@ -20,6 +20,14 @@ public class ApiTests : IClassFixture<WebApplicationFactory<Program>>, IDisposab
         if (Directory.Exists(_jobs)) Directory.Delete(_jobs, recursive: true);
     }
 
+    private async Task<HttpClient> LoggedInClient()
+    {
+        var client = _factory.CreateClient(); // keeps cookies between requests
+        var login = await client.PostAsJsonAsync("/api/auth/login", new { username = "sanja-calix", password = "agrosanja" });
+        Assert.Equal(HttpStatusCode.OK, login.StatusCode);
+        return client;
+    }
+
     private static MultipartFormDataContent Form(string pdfPath, string? priorPath = null, params (string Name, string Value)[] fields)
     {
         var form = new MultipartFormDataContent { { new ByteArrayContent(File.ReadAllBytes(pdfPath)), "pdf", Path.GetFileName(pdfPath) } };
@@ -31,7 +39,7 @@ public class ApiTests : IClassFixture<WebApplicationFactory<Program>>, IDisposab
     [Fact]
     public async Task Creates_gfi_and_serves_the_files()
     {
-        var client = _factory.CreateClient();
+        var client = await LoggedInClient();
         var response = await client.PostAsync("/api/bilanca2gfi",
             Form(SampleFiles.Pdf, SampleFiles.PriorGfi, ("porez", "1.000,00"), ("zaposleni", "21")));
 
@@ -53,7 +61,8 @@ public class ApiTests : IClassFixture<WebApplicationFactory<Program>>, IDisposab
     [Fact]
     public async Task Rejects_a_pdf_that_is_not_a_trial_balance()
     {
-        var response = await _factory.CreateClient().PostAsync("/api/bilanca2gfi", Form(Path.Combine(SampleFiles.Root, "kontni_plan.pdf")));
+        var client = await LoggedInClient();
+        var response = await client.PostAsync("/api/bilanca2gfi", Form(Path.Combine(SampleFiles.Root, "kontni_plan.pdf")));
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Contains("nije bruto bilanca", await response.Content.ReadAsStringAsync());
     }
@@ -61,7 +70,8 @@ public class ApiTests : IClassFixture<WebApplicationFactory<Program>>, IDisposab
     [Fact]
     public async Task Rejects_invalid_numbers()
     {
-        var response = await _factory.CreateClient().PostAsync("/api/bilanca2gfi", Form(SampleFiles.Pdf, null, ("porez", "abc")));
+        var client = await LoggedInClient();
+        var response = await client.PostAsync("/api/bilanca2gfi", Form(SampleFiles.Pdf, null, ("porez", "abc")));
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -70,7 +80,35 @@ public class ApiTests : IClassFixture<WebApplicationFactory<Program>>, IDisposab
     [InlineData("/api/bilanca2gfi/00000000000000000000000000000000/xls")]
     public async Task Download_of_unknown_job_is_404(string url)
     {
-        var response = await _factory.CreateClient().GetAsync(url);
+        var client = await LoggedInClient();
+        var response = await client.GetAsync(url);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Requires_login()
+    {
+        var client = _factory.CreateClient();
+        Assert.Equal(HttpStatusCode.Unauthorized, (await client.PostAsync("/api/bilanca2gfi", Form(SampleFiles.Pdf))).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/bilanca2gfi/00000000000000000000000000000000/xls")).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/auth/me")).StatusCode);
+    }
+
+    [Fact]
+    public async Task Rejects_wrong_password()
+    {
+        var response = await _factory.CreateClient().PostAsJsonAsync("/api/auth/login", new { username = "sanja-calix", password = "kriva" });
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Login_me_and_logout()
+    {
+        var client = await LoggedInClient();
+        var me = await client.GetFromJsonAsync<JsonElement>("/api/auth/me");
+        Assert.Equal("sanja-calix", me.GetProperty("username").GetString());
+
+        await client.PostAsync("/api/auth/logout", null);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/auth/me")).StatusCode);
     }
 }

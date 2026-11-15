@@ -1,3 +1,5 @@
+import { apiFetch } from '../../lib/http';
+
 export type Severity = 'Error' | 'Warning' | 'Info';
 
 export interface Diagnostic {
@@ -55,7 +57,7 @@ export async function createGfi(input: Bilanca2GfiInput): Promise<Bilanca2GfiRes
   if (input.zaposleni != null) body.append('zaposleni', String(input.zaposleni));
   if (input.zaposleniSati != null) body.append('zaposleniSati', String(input.zaposleniSati));
 
-  const response = await fetch('/api/bilanca2gfi', { method: 'POST', body });
+  const response = await apiFetch('/api/bilanca2gfi', { method: 'POST', body });
   if (!response.ok) {
     // The API answers with RFC 7807 problem details; "title" carries the user-facing message.
     let message = `Greška ${response.status}`;

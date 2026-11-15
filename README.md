@@ -84,4 +84,6 @@ Kopiraj `config/ambra.json`, upiši dio naziva tvrtke u `prepoznavanje` i prilag
 - FINA prima isključivo `.xls`, pa izlaz nije `.xlsx`.
 - Kontrole na listu `Kont` koje rade s datumima ispravno se računaju samo uz hrvatske regionalne postavke (FINA kontrola br. 97).
 - NPOI je namjerno na verziji 2.7.x (Apache-2.0). Od verzije 2.8 binarni paket nosi OSMF EULA s naknadom za komercijalne korisnike.
-- Autentifikacija još ne postoji. API sluša samo na `localhost`, a upload endpoint nema antiforgery zaštitu. To treba riješiti kad se doda prijava.
+- **Privremena prijava.** Korisnik i lozinka zapisani su u `appsettings.json` (`Auth:Users`). Prijava koristi kolačić `calix.auth` (HttpOnly, SameSite=Strict, traje 8 h). Svi `/api/bilanca2gfi` pozivi traže prijavu. Kasnije će se zamijeniti pravom autentifikacijom.
+  - Endpointi: `POST /api/auth/login` (`{username, password}`), `POST /api/auth/logout`, `GET /api/auth/me`.
+  - Na Azureu lozinku nadjačaj postavkama aplikacije (`Auth__Users__0__Password`) da ne bude samo ona iz repozitorija.

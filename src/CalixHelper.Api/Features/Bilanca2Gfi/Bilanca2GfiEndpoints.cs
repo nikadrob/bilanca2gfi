@@ -48,10 +48,10 @@ public static class Bilanca2GfiEndpoints
 
     public static IEndpointRouteBuilder MapBilanca2Gfi(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/bilanca2gfi").WithTags("Bilanca2Gfi");
+        var group = app.MapGroup("/api/bilanca2gfi").WithTags("Bilanca2Gfi").RequireAuthorization();
 
         group.MapPost("/", CreateAsync)
-            .DisableAntiforgery() // no cookie authentication yet; revisit when login is added
+            .DisableAntiforgery() // the auth cookie is SameSite=Strict, so cross-site posts carry no credentials
             .Accepts<IFormFile>("multipart/form-data");
 
         group.MapGet("/{jobId}/xls", (string jobId, IOptions<Bilanca2GfiOptions> o, IWebHostEnvironment env) =>
