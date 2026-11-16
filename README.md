@@ -37,6 +37,40 @@ Zatim otvori http://localhost:5173. Kad promijeniš kod sučelja, za produkcijsk
 
 **Testovi:** `dotnet test`
 
+## Deploy na Azure
+
+Svaki push na `main` pokreće `.github/workflows/deploy.yml`. Workflow izgradi web, pokrene testove, napravi `dotnet publish` i pošalje paket na Azure App Service. Ako ijedan test padne, deploy se ne radi. Workflow se može pokrenuti i ručno: *Actions → Deploy to Azure → Run workflow*.
+
+**Jednokratno postavljanje na Azureu** (portal.azure.com):
+
+1. *Create a resource → Web App*:
+   - Publish: *Code*;
+   - Runtime stack: *.NET 10*;
+   - OS: *Linux*;
+   - Region: *West Europe* ili *Germany West Central* (podaci ostaju u EU);
+   - Pricing plan: *Free F1*.
+2. *Settings → Configuration → General settings*:
+   - *SCM Basic Auth Publishing*: **On**;
+   - *HTTPS Only*: **On**;
+   - *Startup Command*: `dotnet CalixHelper.Api.dll`.
+3. *Settings → Environment variables → App settings*:
+
+   | Naziv | Vrijednost |
+   |---|---|
+   | `Auth__Users__0__Password` | nova, jaka lozinka (ona u repozitoriju vrijedi samo lokalno) |
+   | `Bilanca2Gfi__JobsPath` | `/home/data/jobs` (trajni, zapisivi disk; mapa aplikacije je samo za čitanje) |
+   | `ASPNETCORE_FORWARDEDHEADERS_ENABLED` | `true` (cookie za prijavu dobiva oznaku Secure iza Azureovog HTTPS-a) |
+
+4. *Overview → Download publish profile*.
+5. *Cost Management → Budgets*: postavi budžet (npr. 1 €) s e-mail upozorenjem.
+
+**Jednokratno postavljanje na GitHubu** (*Settings → Secrets and variables → Actions*):
+
+- secret `AZURE_WEBAPP_PUBLISH_PROFILE`: cijeli sadržaj preuzetog publish profilea;
+- variable `AZURE_WEBAPP_NAME`: ime Web Appa (npr. `calix-helper`).
+
+Aplikacija je zatim dostupna na `https://<ime>.azurewebsites.net`. Na F1 planu se uspava nakon neaktivnosti, pa prvo otvaranje traje 10–30 s.
+
 ## Bilanca2Gfi u web sučelju
 
 1. Učitaj **PDF bruto bilance**. Po želji učitaj i **prošlogodišnji GFI (.xls)**: iz njega se uzimaju RDG i Dodatni podaci prethodne godine te podaci referentne stranice.

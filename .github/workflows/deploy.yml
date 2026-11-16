@@ -1,0 +1,49 @@
+# Build, test and deploy Calix-c Helper to Azure App Service (Linux, F1).
+# Required in GitHub (Settings → Secrets and variables → Actions):
+#   secret   AZURE_WEBAPP_PUBLISH_PROFILE  – publish profile downloaded from the Azure portal
+#   variable AZURE_WEBAPP_NAME             – name of the Web App (e.g. calix-helper)
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build web UI (into src/CalixHelper.Api/wwwroot)
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Test
+        run: dotnet test -c Release
+
+      - name: Publish API
+        run: dotnet publish src/CalixHelper.Api/CalixHelper.Api.csproj -c Release -o publish
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: publish

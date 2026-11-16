@@ -82,7 +82,7 @@ Detalji izračuna, API-ja i pokretanja su u `README.md`.
 
 ## Otvoreno / sljedeći koraci
 
-1. **Deploy na Azure App Service F1**: GitHub Actions workflow. Treba izgraditi `web` pa napraviti `dotnet publish`. Lozinku treba nadjačati postavkom `Auth__Users__0__Password`, a jobs mapa mora biti na zapisivom disku.
+1. **Deploy na Azure App Service F1 (Linux)**: workflow `.github/workflows/deploy.yml` je napravljen (2026-11-16). Pokreće se pri pushu na `main`, a radi build weba, `dotnet test`, publish i deploy. `Urls` je maknut iz `appsettings.json`, jer Azure sam određuje port, a lokalni port 5080 dolazi iz `launchSettings.json`. **Preostaje** ručno postavljanje Azurea i GitHuba prema `README.md` → "Deploy na Azure". Korisnik je odabrao Azure (Linux) umjesto Vercela, jer Vercel ne pokreće .NET, a Hobby plan je samo za nekomercijalnu upotrebu. Free račun nakon 30 dana treba nadograditi na Pay-As-You-Go. F1 ostaje besplatan, a preporučeno je postaviti budžet s upozorenjem.
 2. **Prava autentifikacija** koja zamjenjuje privremenog korisnika. `AuthContext` i `LoginModal` u sučelju mogu ostati.
 3. **Podaci o reviziji za AMBRU** (FINA kontrola 42):
    - AMBRA ima obvezu revizije, jer je aktiva prethodne godine 3,1 mil. > 2,5 mil., a prihodi 6,65 mil. > 5 mil.
